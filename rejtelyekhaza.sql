@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Feb 01. 15:33
+-- Létrehozás ideje: 2025. Feb 26. 10:03
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -20,22 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `rejtelyekhaza`
 --
-CREATE DATABASE IF NOT EXISTS `rejtelyekhaza` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `rejtelyekhaza`;
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `admin`
---
-
-CREATE TABLE `admin` (
-  `AdminID` char(36) NOT NULL,
-  `Nev` char(60) DEFAULT NULL,
-  `Szint` int(1) DEFAULT NULL,
-  `SALT` varchar(64) NOT NULL,
-  `HASH` varchar(64) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -53,83 +37,26 @@ CREATE TABLE `csapatok` (
   `HASH` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Tábla szerkezet ehhez a táblához `szoba1`
+-- A tábla adatainak kiíratása `csapatok`
 --
 
-CREATE TABLE `szoba1` (
-  `Foglalt_ip` datetime NOT NULL,
-  `AdminID` char(36) NOT NULL,
-  `CsapatID` char(36) NOT NULL,
-  `Zar` timestamp NULL DEFAULT NULL,
-  `Nyit` timestamp NULL DEFAULT NULL,
-  `Komment` char(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `szoba2`
---
-
-CREATE TABLE `szoba2` (
-  `Foglalt_ip` datetime NOT NULL,
-  `AdminID` char(36) NOT NULL,
-  `CsapatID` char(36) NOT NULL,
-  `Zar` timestamp NULL DEFAULT NULL,
-  `Nyit` timestamp NULL DEFAULT NULL,
-  `Komment` char(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `csapatok` (`CsapatID`, `Nev`, `CsKapitany`, `email`, `telefonszam`, `SALT`, `HASH`) VALUES
+('567890ab-cdef-1234-5678-9abcdef01234', 'Harcosok', 'Szabó Dániel', 'daniel.szabo@example.com', 2147483647, 'teamsalt5', 'teamhash5'),
+('c1d2e3f4-5678-90ab-cdef-123456789abc', 'Győztesek', 'Kiss Gergő', 'gergo.kiss@example.com', 214748364, 'teamsalt1', 'teamhash1'),
+('d2e3f456-7890-abcd-ef12-3456789abcde', 'Villámok', 'Horváth Réka', 'reka.horvath@example.com', 123456778, 'teamsalt2', 'teamhash2'),
+('e3f45678-90ab-cdef-1234-56789abcdef0', 'Tigrisek', 'Balogh Ádám', 'adam.balogh@example.com', 7483647, 'teamsalt3', 'teamhash3'),
+('f4567890-abcd-ef12-3456-789abcdef012', 'Mágusok', 'Kovács Eszter', 'eszter.kovacs@example.com', 214748647, 'teamsalt4', 'teamhash4');
 
 --
 -- Indexek a kiírt táblákhoz
 --
 
 --
--- A tábla indexei `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`AdminID`);
-
---
 -- A tábla indexei `csapatok`
 --
 ALTER TABLE `csapatok`
   ADD PRIMARY KEY (`CsapatID`);
-
---
--- A tábla indexei `szoba1`
---
-ALTER TABLE `szoba1`
-  ADD KEY `AdminID` (`AdminID`),
-  ADD KEY `CsapatID` (`CsapatID`);
-
---
--- A tábla indexei `szoba2`
---
-ALTER TABLE `szoba2`
-  ADD KEY `AdminID` (`AdminID`,`CsapatID`),
-  ADD KEY `CsapatID` (`CsapatID`);
-
---
--- Megkötések a kiírt táblákhoz
---
-
---
--- Megkötések a táblához `szoba1`
---
-ALTER TABLE `szoba1`
-  ADD CONSTRAINT `szoba1_ibfk_1` FOREIGN KEY (`CsapatID`) REFERENCES `csapatok` (`CsapatID`),
-  ADD CONSTRAINT `szoba1_ibfk_2` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`AdminID`);
-
---
--- Megkötések a táblához `szoba2`
---
-ALTER TABLE `szoba2`
-  ADD CONSTRAINT `szoba2_ibfk_1` FOREIGN KEY (`CsapatID`) REFERENCES `csapatok` (`CsapatID`),
-  ADD CONSTRAINT `szoba2_ibfk_2` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`AdminID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
